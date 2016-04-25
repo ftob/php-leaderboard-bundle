@@ -1,6 +1,5 @@
 <?php
-
-if (preg_match('/leaderboard$/', $_SERVER["REQUEST_URI"])) {
+if (preg_match('/^\/leaderboard/', $_SERVER["REQUEST_URI"])) {
     $response = [
         'status' => 'OK',
         'leaderboard' => [
@@ -79,9 +78,9 @@ if (preg_match('/leaderboard$/', $_SERVER["REQUEST_URI"])) {
     ];
 
     header('Content-Type: application/json');
-
-} else if (preg_match('/stop/', $_SERVER["REQUEST_URI"])) {
-    exit('Success');
+    echo json_encode($response);
+} else if (preg_match('/^\/stop/', $_SERVER["REQUEST_URI"])) {
+    exit('stop');
 } else {
-    header('Error', true, 500);
+    echo "<p>Welcome to Tests</p>";
 }

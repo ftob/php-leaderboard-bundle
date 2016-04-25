@@ -1,5 +1,5 @@
 <?php
-namespace Ftob\LeaderBoardBundle\Repositories\Contracts\HttpConnection;
+namespace Ftob\LeaderBoardBundle\Repositories\Contracts;
 
 use GuzzleHttp\Psr7\Uri;
 
@@ -12,7 +12,7 @@ class HttpConnection
     /** @var  null|int */
     protected $port;
 
-    protected function __construct(Uri $url, $ssl = true, $port = null)
+    public function __construct(Uri $url, $ssl = true, $port = null)
     {
         $this->url = $url;
         $this->ssl = $ssl;

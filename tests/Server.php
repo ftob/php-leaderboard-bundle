@@ -26,92 +26,18 @@ class Server
 
     private static $started = false;
 
-    public static $url = 'http://127.0.0.1:8126/';
+    public static $url = 'http://127.0.0.1:8000/';
 
-    public static $port = 8126;
+    public static $port = 8000;
 
-    /**
-     * Flush the received requests from the server
-     * @throws \RuntimeException
-     */
-    public static function flush()
-    {
-        return self::getClient()->request('DELETE', 'guzzle-server/requests');
-    }
 
-    /**
-     * Queue an array of responses or a single response on the server.
-     *
-     * Any currently queued responses will be overwritten.  Subsequent requests
-     * on the server will return queued responses in FIFO order.
-     *
-     * @param array|ResponseInterface $responses A single or array of Responses
-     *                                           to queue.
-     * @throws \Exception
-     */
-    public static function enqueue($responses)
-    {
-        $data = [];
-        foreach ((array) $responses as $response) {
-            if (!($response instanceof ResponseInterface)) {
-                throw new \Exception('Invalid response given.');
-            }
-            $headers = array_map(function ($h) {
-                return implode(' ,', $h);
-            }, $response->getHeaders());
-            $data[] = [
-                'status'  => (string) $response->getStatusCode(),
-                'reason'  => $response->getReasonPhrase(),
-                'headers' => $headers,
-                'body'    => base64_encode((string) $response->getBody())
-            ];
-        }
-        self::getClient()->request('PUT', 'guzzle-server/responses', [
-            'json' => $data
-        ]);
-    }
-    /**
-     * Get all of the received requests
-     *
-     * @return ResponseInterface[]
-     * @throws \RuntimeException
-     */
-    public static function received()
-    {
-        if (!self::$started) {
-            return [];
-        }
-        $response = self::getClient()->request('GET', 'guzzle-server/requests');
-        $data = json_decode($response->getBody(), true);
-        return array_map(
-            function ($message) {
-                $uri = $message['uri'];
-                if (isset($message['query_string'])) {
-                    $uri .= '?' . $message['query_string'];
-                }
-                $response = new Psr7\Request(
-                    $message['http_method'],
-                    $uri,
-                    $message['headers'],
-                    $message['body'],
-                    $message['version']
-                );
-                return $response->withUri(
-                    $response->getUri()
-                        ->withScheme('http')
-                        ->withHost($response->getHeaderLine('host'))
-                );
-            },
-            $data
-        );
-    }
     /**
      * Stop running the node.js server
      */
     public static function stop()
     {
         if (self::$started) {
-            self::getClient()->request('DELETE', 'guzzle-server');
+            self::getClient()->request('GET', 'stop');
         }
         self::$started = false;
     }
@@ -133,8 +59,7 @@ class Server
             return;
         }
         if (!self::isListening()) {
-            exec('node ' . __DIR__ . '/server.js '
-                . self::$port . ' >> /tmp/server.log 2>&1 &');
+            exec('php -S 0.0.0.0:8000 ' . __DIR__ . '/Serverd.php >> /tmp/server.log 2>&1 &');
             self::wait();
         }
         self::$started = true;
@@ -143,7 +68,7 @@ class Server
     private static function isListening()
     {
         try {
-            self::getClient()->request('GET', 'perf', [
+            self::getClient()->request('GET', 'test', [
                 'connect_timeout' => 5,
                 'timeout'         => 5
             ]);

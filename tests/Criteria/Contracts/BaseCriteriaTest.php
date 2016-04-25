@@ -3,10 +3,11 @@ namespace Ftob\LeaderBoardBundle\Tests\Criteria\Contracts;
 
 use Ftob\LeaderBoardBundle\Criteria\Contracts\Attribute;
 use Ftob\LeaderBoardBundle\Criteria\Contracts\BaseCriteria;
-use phpDocumentor\Reflection\DocBlock\Type\Collection;
+use Illuminate\Support\Collection;
 
-class BaseCriteriaTests extends \PHPUnit_Framework_TestCase
+class BaseCriteriaTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testBuild()
     {
         $criteria = BaseCriteria::build();
@@ -16,14 +17,12 @@ class BaseCriteriaTests extends \PHPUnit_Framework_TestCase
 
     public function dataProvider()
     {
+        $std =  new \StdClass();
+        $std->test = 1;
+        $std->test2 = 2;
         return [
             [
-                new Collection([
-                    [
-                        'test' => 1,
-                        'test2' => 2
-                    ]
-                ])
+                   [$std]
             ]
         ];
     }
@@ -34,9 +33,9 @@ class BaseCriteriaTests extends \PHPUnit_Framework_TestCase
      */
     public function testLess($payload)
     {
+        $payload = new Collection($payload);
         $result = BaseCriteria::build()->less(new Attribute('test'), 2)->apply($payload);
-
-        $this->assertArrayHasKey('test', $result->keys()->toArray());
+        $this->assertTrue(in_array('test', $result->keys()->toArray()));
 
         $this->assertCount(1, $result->toArray());
     }
@@ -47,9 +46,11 @@ class BaseCriteriaTests extends \PHPUnit_Framework_TestCase
      */
     public function testEqual($payload)
     {
+        $payload = new Collection($payload);
         $result = BaseCriteria::build()->equal(new Attribute('test'), 1)->apply($payload);
 
-        $this->assertArrayHasKey('test', $result->keys()->toArray());
+        $this->assertTrue(in_array('test', $result->keys()->toArray()));
+
 
         $this->assertCount(1, $result->toArray());
     }
@@ -58,11 +59,14 @@ class BaseCriteriaTests extends \PHPUnit_Framework_TestCase
      * @param $payload
      * @dataProvider dataProvider
      */
-    public function greater($payload)
+    public function testGreater($payload)
     {
+        $payload = new Collection($payload);
+
         $result = BaseCriteria::build()->greater(new Attribute('test2'), new Attribute('test'))->apply($payload);
 
-        $this->assertArrayHasKey('test', $result->keys()->toArray());
+        $this->assertTrue(in_array('test', $result->keys()->toArray()));
+
 
         $this->assertCount(1, $result->toArray());
     }

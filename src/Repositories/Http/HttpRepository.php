@@ -4,7 +4,7 @@ namespace Ftob\LeaderBoardBundle\Repositories\Http;
 use Ftob\LeaderBoardBundle\Criteria\Contracts\CriteriaInterface;
 use Ftob\LeaderBoardBundle\Repositories\Contracts\CacheableInterface;
 use Ftob\LeaderBoardBundle\Repositories\Contracts\CacheConfig;
-use Ftob\LeaderBoardBundle\Repositories\Contracts\HttpConnection\HttpConnection;
+use Ftob\LeaderBoardBundle\Repositories\Contracts\HttpConnection;
 use Ftob\LeaderBoardBundle\Repositories\Contracts\RepositoryInterface;
 use Ftob\LeaderBoardBundle\Repositories\Traits\CacheTrait;
 use GuzzleHttp\Client;
@@ -50,9 +50,11 @@ class HttpRepository implements RepositoryInterface, CacheableInterface
      */
     public function findAll()
     {
-        $cacheKey = $this->cacheConfig->getPrefix() . '_' . $this->getCacheKey();
+
 
         if ($this->isCache) {
+            $cacheKey = $this->cacheConfig->getPrefix() . '_' . $this->getCacheKey();
+
             if ($this->cache()->has($cacheKey)) {
                 return new Collection($this->cache()->get($cacheKey));
             }
@@ -73,7 +75,7 @@ class HttpRepository implements RepositoryInterface, CacheableInterface
     public function find($id)
     {
         $items = $this->findAll();
-        $item = $items->search(function($value) use ($id){
+        $item = $items->filter(function($value) use ($id){
             return $value->id === $id;
         });
 
@@ -88,7 +90,7 @@ class HttpRepository implements RepositoryInterface, CacheableInterface
     public function findBy($attribute, $value)
     {
         $items = $this->findAll();
-        $items = $items->search(function($item) use ($attribute, $value){
+        $items = $items->filter(function($item) use ($attribute, $value){
             return $item->{$attribute} === $value;
         });
 

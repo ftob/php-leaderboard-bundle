@@ -47,24 +47,18 @@ class BaseCriteria implements CriteriaInterface
                     continue;
                 }
                 // Фильтруем значение
-                $collection = $collection->filter(function($value) use ($key, $parameters) {
-                    foreach ($parameters as $a => $b) {
+                $collection = $collection->filter(function($value, $k) use ($key, $parameters) {
+                    foreach ($parameters as $param) {
                         // Получем опреатор в зависимости от ключа
                         $exp = $this->getSign($key);
 
-                        if ($a instanceof Attribute) {
-                            if ($b instanceof Attribute) {
-                                return eval('$value->{$a} ' .  $exp . ' $value->{$b}');
-                            } else {
-                                return eval('$value->{$a} ' .  $exp . ' $b');
-                            }
-                        } else {
-                            if ($b instanceof Attribute) {
-                                return eval('$value->{$b}' . $exp . '$a');
-                            } else {
-                                // В любом случае должен быть хотя бы один атрибут
-                                throw new CriteriaParametersException('One of parameters must be Attribute');
-                            }
+                        /** @var Parameters $param*/
+                        if(count($param->getAttributes()) === 2) {
+                            $attributes = $param->getAttributes();
+                            return eval('return $value->{head($attributes)}' .  $exp . ' $value->{last($attributes)};');
+                        } else if (count($param->getAttributes()) === 1 && !empty($param->getValue())) {
+
+                            return eval('return $value->{head($param->getAttributes())} ' . $exp . ' $param->getValue();');
                         }
 
                     }
@@ -78,45 +72,45 @@ class BaseCriteria implements CriteriaInterface
 
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @param $key
      */
-    protected function addCondition($attributeOrValue, $attributeOrValue, $key)
+    protected function addCondition($attributeOrValueOne, $attributeOrValueTwo, $key)
     {
-        $this->criteria[$key][] = [$attributeOrValue => $attributeOrValue];
+        $this->criteria[$key][] = new Parameters($attributeOrValueOne, $attributeOrValueTwo);
     }
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function equal($attributeOrValue, $attributeOrValue)
+    public function equal($attributeOrValueOne, $attributeOrValueTwo)
     {
-        $this->addCondition($attributeOrValue, $attributeOrValue, self::EQUAL);
+        $this->addCondition($attributeOrValueOne, $attributeOrValueTwo, self::EQUAL);
         return $this;
     }
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function less($attributeOrValue, $attributeOrValue)
+    public function less($attributeOrValueOne, $attributeOrValueTwo)
     {
-        $this->addCondition($attributeOrValue, $attributeOrValue, self::LESS);
+        $this->addCondition($attributeOrValueOne, $attributeOrValueTwo, self::LESS);
         return $this;
     }
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function greater($attributeOrValue, $attributeOrValue)
+    public function greater($attributeOrValueOne, $attributeOrValueTwo)
     {
-        $this->addCondition($attributeOrValue, $attributeOrValue, self::GREATER);
+        $this->addCondition($attributeOrValueOne, $attributeOrValueTwo, self::GREATER);
         return $this;
     }
 
@@ -129,7 +123,7 @@ class BaseCriteria implements CriteriaInterface
         $sign = [
             static::EQUAL => '===',
             static::LESS => '<',
-            static::GREATER => '>'
+            static::GREATER => '>',
         ];
         if (array_key_exists($key, $sign)) {
             return $sign[$key];

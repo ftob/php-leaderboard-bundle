@@ -2,7 +2,7 @@
 namespace Ftob\LeaderBoardBundle\Exceptions;
 
 
-class HttpResponseException extends \HttpResponseException
+class HttpResponseException extends \Exception
 {
     //
 }
