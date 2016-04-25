@@ -21,24 +21,24 @@ interface CriteriaInterface
     public function apply(Collection $collection);
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function equal($attributeOrValue, $attributeOrValue);
+    public function equal($attributeOrValueOne, $attributeOrValueTwo);
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function less($attributeOrValue, $attributeOrValue);
+    public function less($attributeOrValueOne, $attributeOrValueTwo);
 
     /**
-     * @param $attributeOrValue
-     * @param $attributeOrValue
+     * @param $attributeOrValueOne
+     * @param $attributeOrValueTwo
      * @return $this
      */
-    public function greater($attributeOrValue, $attributeOrValue);
+    public function greater($attributeOrValueOne, $attributeOrValueTwo);
 
 }

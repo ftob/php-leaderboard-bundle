@@ -6,12 +6,8 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * The Server class is used to control a scripted webserver using node.js that
+ * The Server class is used to control a scripted webserver  that
  * will respond to HTTP requests with queued responses.
- *
- * Queued responses will be served to requests using a FIFO order.  All requests
- * received by the server are stored on the node.js server and can be retrieved
- * by calling {@see Server::received()}.
  *
  * Mock responses that don't require data to be transmitted over HTTP a great
  * for testing.  Mock response, however, cannot test the actual sending of an
@@ -31,9 +27,7 @@ class Server
     public static $port = 8000;
 
 
-    /**
-     * Stop running the node.js server
-     */
+
     public static function stop()
     {
         if (self::$started) {
