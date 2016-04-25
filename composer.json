@@ -1,0 +1,21 @@
+{
+    "name": "ftob/php-leaderboard-bundle",
+    "authors": [
+        {
+            "name": "Nikita Volkov",
+            "email": "litebackend@gmail.com"
+        }
+    ],
+    "require": {
+		"symfony/http-kernel": "^3.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "illuminate/support": "^5.2",
+        "illuminate/cache": "^5.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit":"^5.0"
+	},
+	"autoload": {
+		"psr-4": { "Ftob\\LeaderBoardBundle\\": "src\\" }
+	}
+}
