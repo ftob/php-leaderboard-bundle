@@ -32,6 +32,7 @@ class LeaderService implements LeaderServiceInterface
      */
     public function statistics()
     {
+        $this->statistics->setCurrentLeaders($this->repository()->findAll());
         return $this->statistics;
     }
 

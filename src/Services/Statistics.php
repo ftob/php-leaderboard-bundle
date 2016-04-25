@@ -7,18 +7,20 @@ use Illuminate\Support\Collection;
 
 class Statistics implements StatisticsInterface
 {
+    protected $leaders;
+
+
     public function setCurrentLeaders(Collection $collection)
     {
-        // TODO: Implement setCurrentLeaders() method.
+        $this->leaders = $collection;
     }
-
 
     /**
      * @inheritdoc
      */
     public function getCurrentLeaders()
     {
-        // TODO: Implement getCurrentLeaders() method.
+        return $this->leaders;
     }
 
     /**
@@ -27,7 +29,7 @@ class Statistics implements StatisticsInterface
      */
     public function changesInTheNumberOfPositions(array $prevLeaders)
     {
-        // TODO: Implement changesInTheNumberOfPositions() method.
+        
     }
 
     /**
