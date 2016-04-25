@@ -3,7 +3,7 @@
          colors="true">
     <testsuites>
         <testsuite>
-            <directory>tests/Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <filter>
