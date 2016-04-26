@@ -17,9 +17,14 @@ $container->setDefinition(
 );
 
 $container->setDefinition(
+    'leaderboard.filesystem',
+    new Definition(\Illuminate\Filesystem\Filesystem::class, [])
+);
+
+$container->setDefinition(
     'leaderboard.cache.store',
     new Definition(\Illuminate\Cache\FileStore::class, [
-        new \Illuminate\Filesystem\Filesystem(), '%board.cache.dir%'
+        new Reference('leaderboard.filesystem'), '%board.cache.dir%'
     ])
 );
 
