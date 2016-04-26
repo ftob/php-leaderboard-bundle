@@ -13,7 +13,7 @@ $container->setDefinition('leaderboard.client', new Definition(\GuzzleHttp\Clien
 
 $container->setDefinition(
     'leaderboard.connect',
-    new Definition(HttpConnection::class, [new Reference('leqaderboard.url')])
+    new Definition(HttpConnection::class, [new Reference('leaderboard.url')])
 );
 
 $container->setDefinition(
