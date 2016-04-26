@@ -11,6 +11,22 @@ use Illuminate\Support\Collection;
 interface StatisticsInterface
 {
     /**
+     * Map
+     * @param callable $callback
+     * @param array $parameters
+     * @return mixed
+     */
+    public function map(callable $callback, array $parameters = []);
+
+    /**
+     * Reduce
+     * @param callable $callback
+     * @param array $parameters
+     * @return mixed
+     */
+    public function reduce(callable $callback, array $parameters = []);
+
+    /**
      * @param Collection $collection
      * @return void
      */
@@ -21,41 +37,36 @@ interface StatisticsInterface
      */
     public function getCurrentLeaders();
 
-    /**
-     * Кол-во изменений позиций для текущих лидеров
-     * @param []Collection $prevLeaders
-     * @return Collection
-     */
-    public function changesInTheNumberOfPositions(array $prevLeaders);
 
     /**
-     * На Сколько позиций повысил игрок свой рейтинг
-     * @param $id
      * @param []Collection $prevLeaders
-     * @return int
+     * @return void
      */
-    public function numberOfEnhancementsInThePosition($id, array $prevLeaders);
+    public function setPrevLeaders(array $prevLeaders);
 
     /**
-     * На Сколько позиций понизил игрок свой рейтинг
-     * @param $id
-     * @param []Collection $prevLeaders
+     * @return []Collection
+     */
+    public function getPrevLeaders();
+
+    /**
      * @return mixed
      */
-    public function numberOfSlidesInThePosition($id, array $prevLeaders);
+    public function getResultMap();
+    
 
-    /**
-     * @param $id
-     * @param []Collection $prevLeaders
-     * @return Collection
-     */
-    public function getHistoryProfileLeader($id, array $prevLeaders);
+//
+//    /**
+//     * @param $id
+//     * @param []Collection $prevLeaders
+//     * @return Collection
+//     */
+//    public function getHistoryProfileLeader($id, array $prevLeaders);
+//
+//    /**
 
-    /**
-     * Получение аномальных лидеров - (аномальные лидеры - это те лидеры у которых был аномальны рост очков или
-     * рост в позицие был аномально быстрыйы - то есть повышен не натурально)
-     * @return Collection
-     */
-    public function getAbnormalLeaders();
+//     * @return Collection
+//     */
+//    public function getAbnormalLeaders();
 
 }

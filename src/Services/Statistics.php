@@ -9,7 +9,13 @@ class Statistics implements StatisticsInterface
 {
     protected $leaders;
 
+    protected $prevLeaders = [];
 
+    protected $resultMap;
+
+    /**
+     * @param Collection $collection
+     */
     public function setCurrentLeaders(Collection $collection)
     {
         $this->leaders = $collection;
@@ -24,50 +30,57 @@ class Statistics implements StatisticsInterface
     }
 
     /**
-     * @inheritdoc
-     * @param array $prevLeaders
+     * @param callable $callback
+     * @param array $parameters
+     * @return $this
      */
-    public function changesInTheNumberOfPositions(array $prevLeaders)
+    public function map(callable $callback, array $parameters = [])
     {
-        
+        $result = call_user_func_array($callback, $parameters);
+        $this->setResultMap($result);
+        return $this;
     }
 
     /**
-     * @inheritdoc
-     * @param $id
-     * @param array $prevLeaders
+     * @param callable $callback
+     * @param array $parameters
+     * @return mixed
      */
-    public function numberOfEnhancementsInThePosition($id, array $prevLeaders)
+    public function reduce(callable $callback, array $parameters = [])
     {
-        // TODO: Implement numberOfEnhancementsInThePosition() method.
+        return call_user_func_array($callback, $parameters);
     }
 
     /**
-     * @inheritdoc
-     * @param $id
      * @param array $prevLeaders
      */
-    public function numberOfSlidesInThePosition($id, array $prevLeaders)
+    public function setPrevLeaders(array $prevLeaders)
     {
-        // TODO: Implement numberOfSlidesInThePosition() method.
+        $this->prevLeaders = $prevLeaders;
     }
 
     /**
-     * @inheritdoc
-     * @param $id
-     * @param array $prevLeaders
+     * @return array
      */
-    public function getHistoryProfileLeader($id, array $prevLeaders)
+    public function getPrevLeaders()
     {
-        // TODO: Implement getHistoryProfileLeader() method.
+        return $this->prevLeaders;
     }
 
     /**
-     * @inheritdoc
+     * @return mixed
      */
-    public function getAbnormalLeaders()
+    public function getResultMap()
     {
-        // TODO: Implement getAbnormalLeaders() method.
+        return $this->resultMap;
+    }
+
+    /**
+     * @param $data
+     */
+    protected function setResultMap($data)
+    {
+        $this->resultMap = $data;
     }
 
 
