@@ -35,7 +35,7 @@ class HttpRepository implements RepositoryInterface, CacheableInterface
     {
         $this->connection = $connection;
         $this->client = $client;
-
+        $this->cacheConfig = $config;
         // Cache config
         if ($config) {
             $this->setStore($config->getStore());
