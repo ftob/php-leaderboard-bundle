@@ -51,7 +51,8 @@ class HttpRepository implements RepositoryInterface, CacheableInterface
     public function findAll()
     {
         if ($this->isCache) {
-            $cacheKey = $this->cacheConfig->getPrefix() . '_' . $this->getCacheKey();
+            $cacheKey = $this->cacheConfig->getPrefix()
+                ? $this->cacheConfig->getPrefix() . '_' . $this->getCacheKey() : $this->getCacheKey();
 
             if ($this->cache()->has($cacheKey)) {
                 return new Collection($this->cache()->get($cacheKey));
