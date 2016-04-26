@@ -13,19 +13,24 @@
 ### Bundle
 Данная библиотека может выполнять функции Symfony bundle. Для этого включите его в Kernel своего приложения.
 Пример:
-`<?php
-// app/AppKernel.php
 
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Ftob\LeaderBoardBundle\LeaderBoardBundle(),
-        // ...
-    );
-}`
+    <?php
+    
+    // app/AppKernel.php
+    
+    public function registerBundles()
+    {
+        $bundles = array(
+            // ...
+            new Ftob\LeaderBoardBundle\LeaderBoardBundle(),
+            // ...
+        );
+    }
+
 
 ### Configuration
+
+
 
 #### Cache
 
